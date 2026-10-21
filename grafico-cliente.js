@@ -87,6 +87,16 @@ async function desenharGraficoCliente(canvas) {
   const x0 = M + colRotulo + 16;
   const trilha = W - M - colPct - colValor - 16 - x0;
   const maior = Math.max(...grupos.map(g => g.bruto));
+
+  // Logo como marca-d'água no fundo da área do gráfico (barras + total), bem clara
+  if (logo) {
+    const areaH = Math.max(grupos.length * L + 76, 160);
+    const e = Math.min((W - 2 * M) * 0.5 / logo.width, areaH * 0.8 / logo.height);
+    ctx.globalAlpha = 0.08;
+    ctx.drawImage(logo, (W - logo.width * e) / 2, y + (areaH - logo.height * e) / 2, logo.width * e, logo.height * e);
+    ctx.globalAlpha = 1;
+  }
+
   ctx.fillStyle = GC.grade;
   ctx.fillRect(x0, y, 1, grupos.length * L); // linha de base
 
