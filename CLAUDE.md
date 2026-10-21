@@ -64,3 +64,4 @@ Strong success criteria let you loop independently. Weak criteria ("make it work
 - Página estática (HTML + CSS + JavaScript puro), sem build, sem servidor, sem banco.
 - Os dados de cada orçamento ficam em um arquivo `.json` que o usuário abre e salva pela própria página.
 - Repositório público: nunca commitar orçamentos reais, planilhas de clientes ou valores de fornecedores. Para testes, usar só dados inventados.
+- Ao alterar `style.css` ou qualquer `.js`, incrementar o `?v=` desses arquivos no `index.html` (o navegador guarda cópias antigas por até 10 min no GitHub Pages).
