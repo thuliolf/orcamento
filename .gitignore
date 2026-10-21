@@ -1,0 +1,11 @@
+# Dados reais de clientes nunca vão para o repositório (ele é público)
+dados/
+*.xlsx
+*.xls
+*.csv
+
+# Sistema operacional / editores
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
