@@ -4,9 +4,46 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Orçamento de Eventos</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Orçamento de Eventos</h1>
-  <p>Em construção.</p>
+  <div class="app">
+    <header class="barra">
+      <h1>Orçamento de Eventos</h1>
+      <nav>
+        <button id="btn-novo">Novo</button>
+        <button id="btn-abrir">Abrir…</button>
+        <button id="btn-salvar" class="principal">Salvar</button>
+        <button id="btn-imprimir">Imprimir</button>
+        <input type="file" id="arquivo" accept=".json,application/json" hidden>
+      </nav>
+    </header>
+
+    <main>
+      <section class="cabecalho">
+        <label>Identificação <input data-cab="identificacao" placeholder="Ex.: Festa de fim de ano 2026"></label>
+        <label>Cliente <input data-cab="cliente"></label>
+        <label>Data do evento <input type="date" data-cab="data"></label>
+        <label>Horário e local <input data-cab="local" placeholder="Ex.: 19h, Salão Central"></label>
+        <label>Imposto (%) <input data-cab="imposto" class="num" inputmode="decimal"></label>
+        <label>Markup padrão (%) <input data-cab="markup" class="num" inputmode="decimal"
+          title="Usado para calcular o valor cobrado a partir do valor real"></label>
+        <button id="btn-padrao" class="discreto" title="Novos orçamentos começam com este imposto e markup">Usar como padrão</button>
+      </section>
+
+      <div id="grupos"></div>
+      <button id="btn-grupo" class="adicionar">+ Grupo</button>
+
+      <section class="total-geral">
+        <h2>Total do orçamento</h2>
+        <dl id="total"></dl>
+      </section>
+    </main>
+  </div>
+
+  <div id="impressao"></div>
+
+  <script src="calc.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

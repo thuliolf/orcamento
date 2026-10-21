@@ -1,0 +1,58 @@
+{
+  "versao": 1,
+  "identificacao": "Confraternização de Fim de Ano - Exemplo",
+  "cliente": "Empresa Fictícia Ltda.",
+  "data": "2026-12-12",
+  "local": "20h, Salão Exemplo",
+  "imposto": 10,
+  "markup": 30,
+  "grupos": [
+    {
+      "nome": "Equipe",
+      "impressao": "detalhado",
+      "subgrupos": [
+        {
+          "nome": "",
+          "itens": [
+            { "quantidade": 1, "descricao": "Coordenador", "real": 1000, "liquido": 1300, "manual": false },
+            { "quantidade": 2, "descricao": "Recepcionistas", "real": 400, "liquido": 520, "manual": false },
+            { "quantidade": 1, "descricao": "Assessoria e acompanhamento", "real": null, "liquido": 3000, "manual": true }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "Comidas e bebidas",
+      "impressao": "detalhado",
+      "subgrupos": [
+        {
+          "nome": "Comidas",
+          "itens": [
+            { "quantidade": 150, "descricao": "Buffet completo com garçons", "real": 15000, "liquido": 22000, "manual": true },
+            { "quantidade": 1, "descricao": "Mesa de doces", "real": 2000, "liquido": 2600, "manual": false }
+          ]
+        },
+        {
+          "nome": "Bebidas",
+          "itens": [
+            { "quantidade": 150, "descricao": "Open bar de drinks (4 horas)", "real": 6000, "liquido": 7800, "manual": false }
+          ]
+        }
+      ]
+    },
+    {
+      "nome": "Decoração",
+      "impressao": "resumido",
+      "subgrupos": [
+        {
+          "nome": "",
+          "itens": [
+            { "quantidade": 20, "descricao": "Arranjos de mesa com velas", "real": 3000, "liquido": 3900, "manual": false },
+            { "quantidade": 1, "descricao": "Painel de folhagem (3 m)", "real": 1200, "liquido": 1560, "manual": false },
+            { "quantidade": 1, "descricao": "Aluguel de mobiliário lounge", "real": 2500, "liquido": 3250, "manual": false }
+          ]
+        }
+      ]
+    }
+  ]
+}

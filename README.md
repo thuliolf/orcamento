@@ -1,25 +1,76 @@
 # Orçamento de Eventos
 
-Página estática para montar orçamentos de eventos: despesas agrupadas em grupos e subgrupos, valor real do fornecedor (opcional), imposto padrão sobre todas as despesas, valor cobrado calculado ou ajustado à mão, e lucro em valor e percentual por linha. A impressão pode sair resumida por grupo ou detalhada linha a linha.
+Página estática para montar orçamentos de eventos: despesas agrupadas em grupos e subgrupos, valor real do fornecedor (opcional), imposto padrão sobre todas as despesas, valor cobrado calculado ou ajustado à mão, e lucro em valor e percentual por linha. A impressão sai com valor único ou linha por linha, escolhido em cada grupo.
 
-Não há servidor nem banco de dados. Cada orçamento é um arquivo `.json` que você abre na página, edita e salva de volta no seu computador.
+Não há servidor nem banco de dados. Cada orçamento é um arquivo `.json` que você abre na página (**Abrir…**), edita e salva de volta no seu computador (**Salvar**).
 
-## Rodar localmente
+## Usar
 
-Não precisa instalar nada além de um navegador. Para servir a pasta:
+Abra o `index.html` no navegador, com duplo clique mesmo. Para testar com dados, abra `exemplos/exemplo.json`.
 
-```bash
-python3 -m http.server 8000
+## Regras de cálculo
+
+Mesmas da planilha original:
+
+| Coluna | Cálculo |
+|---|---|
+| Real | valor do fornecedor; opcional (vazio conta como zero) |
+| Cobrado líquido | `real × (1 + markup)` enquanto não for alterado à mão |
+| Imposto | `líquido × imposto %` |
+| Cobrado bruto | `líquido + imposto` (valor que vai para o cliente) |
+| Lucro | `líquido − real` |
+| % Lucro | `lucro ÷ bruto` |
+
+Digitar o líquido ou o bruto marca a linha como manual (fundo amarelo): ela deixa de acompanhar o real e o markup. O botão ↺ volta a linha ao cálculo automático.
+
+**Usar como padrão** guarda imposto e markup no navegador para os próximos orçamentos novos.
+
+## Impressão
+
+Mostra só o que é do cliente: quantidade, descrição e valor bruto, além de um total por grupo e um total geral. Em cada grupo, "Na impressão" escolhe entre:
+
+- **linha por linha**: cada item com seu valor, e subtotal por subgrupo;
+- **valor único**: os itens listados sem valor e um só total para o grupo.
+
+## Formato do arquivo
+
+```json
+{
+  "versao": 1,
+  "identificacao": "...", "cliente": "...", "data": "2026-12-12", "local": "...",
+  "imposto": 10,
+  "markup": 30,
+  "grupos": [
+    {
+      "nome": "Decoração",
+      "impressao": "detalhado | resumido",
+      "subgrupos": [
+        {
+          "nome": "",
+          "itens": [
+            { "quantidade": 1, "descricao": "...", "real": 1000, "liquido": 1300, "manual": false }
+          ]
+        }
+      ]
+    }
+  ]
+}
 ```
 
-Depois abra http://localhost:8000.
+Percentuais são guardados como número (`10` = 10%). Um subgrupo com nome vazio não aparece como cabeçalho. Os valores das linhas são totais da linha; a quantidade é só informativa.
 
-## Estrutura
+## Desenvolvimento
 
 ```
-index.html   página do sistema
-CLAUDE.md    diretrizes de desenvolvimento
+index.html          página
+style.css           estilos (tela e impressão)
+app.js              tela, abrir/salvar, impressão
+calc.js             regras de cálculo
+tests/              testes dos cálculos
+exemplos/           orçamento fictício
 ```
+
+Testes: `node --test tests/*.test.js`
 
 ## Dados
 
