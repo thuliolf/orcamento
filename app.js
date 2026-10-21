@@ -101,11 +101,21 @@ function htmlTotais(prefixo) {
     .map(k => `<td class="num" data-${prefixo}="${k}"></td>`).join('');
 }
 
-function htmlSubgrupo(s, si, unico) {
+// Alça para arrastar + setas para subir/descer
+function htmlOrdem(tipo, pos, total) {
+  if (total < 2) return '';
+  return `<span class="alca" draggable="true" data-alca="${tipo}" title="Arraste para mudar a ordem">⠿</span>
+    <button data-acao="${tipo}-subir" class="discreto seta" title="Subir"${pos === 0 ? ' disabled' : ''}>↑</button>
+    <button data-acao="${tipo}-descer" class="discreto seta" title="Descer"${pos === total - 1 ? ' disabled' : ''}>↓</button>`;
+}
+
+function htmlSubgrupo(s, si, total) {
+  const unico = total === 1;
   return `
     <tbody data-s="${si}">
       <tr class="sub-cab">
         <td colspan="${COLUNAS}">
+          ${htmlOrdem('sub', si, total)}
           <input data-acao="nome-sub" value="${esc(s.nome)}" placeholder="Subgrupo (opcional)">
           <button data-acao="item-novo" class="discreto">+ Linha</button>
           ${unico ? '' : '<button data-acao="sub-remover" class="discreto perigo">Remover subgrupo</button>'}
@@ -122,6 +132,7 @@ function htmlGrupo(g, gi) {
   return `
     <section class="grupo" data-g="${gi}">
       <div class="grupo-cab">
+        ${htmlOrdem('grupo', gi, orc.grupos.length)}
         <input data-acao="nome-grupo" class="nome-grupo" value="${esc(g.nome)}" placeholder="Nome do grupo (ex.: Decoração)">
         <label>Na impressão
           <select data-acao="impressao">
@@ -138,7 +149,7 @@ function htmlGrupo(g, gi) {
             <th>Qtd</th><th>Descrição</th><th>Real</th><th>Cobrado líquido</th><th>Imposto</th>
             <th>Cobrado bruto</th><th>Lucro</th><th>% Lucro</th><th></th>
           </tr></thead>
-          ${g.subgrupos.map((s, si) => htmlSubgrupo(s, si, g.subgrupos.length === 1)).join('')}
+          ${g.subgrupos.map((s, si) => htmlSubgrupo(s, si, g.subgrupos.length)).join('')}
           <tfoot><tr><td></td><td>Total do grupo</td>${htmlTotais('g')}<td></td></tr></tfoot>
         </table>
       </div>
@@ -290,9 +301,89 @@ grupos.addEventListener('click', e => {
     if (!confirm(`Remover o grupo "${g.nome || 'sem nome'}" e todas as suas linhas?`)) return;
     orc.grupos.splice(orc.grupos.indexOf(g), 1);
   }
+  else if (/-(subir|descer)$/.test(acao)) {
+    const [tipo, sentido] = acao.split('-');
+    const lista = tipo === 'grupo' ? orc.grupos : g.subgrupos;
+    const de = lista.indexOf(tipo === 'grupo' ? g : s);
+    const para = de + (sentido === 'subir' ? -1 : 1);
+    mover(lista, de, para);
+    render();
+    marcarAlterado();
+    // Mantém o foco na mesma seta, agora na nova posição (útil pelo teclado)
+    const sec = document.querySelector(`section.grupo[data-g="${tipo === 'grupo' ? para : orc.grupos.indexOf(g)}"]`);
+    const alvo = (tipo === 'grupo' ? sec.querySelector('.grupo-cab') : sec.querySelector(`tbody[data-s="${para}"]`))
+      .querySelector(`[data-acao="${acao}"]`);
+    if (alvo && !alvo.disabled) alvo.focus();
+    return;
+  }
   else return;
   render();
   marcarAlterado();
+});
+
+// ---------- Reordenar grupos e subgrupos ----------
+
+function mover(lista, de, para) {
+  lista.splice(para, 0, lista.splice(de, 1)[0]);
+}
+
+// Arrastar pela alça ⠿. Subgrupos só mudam de lugar dentro do próprio grupo.
+let arrasto = null;
+
+function alvoArrasto(e) {
+  if (!arrasto) return null;
+  const el = arrasto.tipo === 'grupo' ? e.target.closest('section.grupo') : e.target.closest('tbody[data-s]');
+  if (!el || (arrasto.tipo === 'sub' && Number(el.closest('section.grupo').dataset.g) !== arrasto.gi)) return null;
+  const r = el.getBoundingClientRect();
+  return { el, depois: e.clientY > r.top + r.height / 2 };
+}
+
+function limparMarcas() {
+  for (const el of document.querySelectorAll('.marca-cima, .marca-baixo')) el.classList.remove('marca-cima', 'marca-baixo');
+}
+
+grupos.addEventListener('dragstart', e => {
+  const alca = e.target.closest?.('[data-alca]');
+  if (!alca) return;
+  const sec = alca.closest('section.grupo');
+  const el = alca.dataset.alca === 'grupo' ? sec : alca.closest('tbody');
+  arrasto = { tipo: alca.dataset.alca, gi: Number(sec.dataset.g), si: Number(el.dataset.s), el };
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', '');
+  e.dataTransfer.setDragImage(el, 24, 20);
+  el.classList.add('arrastando');
+});
+
+grupos.addEventListener('dragover', e => {
+  const a = alvoArrasto(e);
+  if (!a) return;
+  e.preventDefault();
+  limparMarcas();
+  // Linha indicando onde vai cair: no grupo inteiro, ou na primeira/última linha visível do subgrupo
+  const marca = arrasto.tipo === 'grupo' ? a.el
+    : (a.depois ? [...a.el.rows].filter(r => !r.hidden).pop() : a.el.rows[0]);
+  marca.classList.add(a.depois ? 'marca-baixo' : 'marca-cima');
+});
+
+grupos.addEventListener('drop', e => {
+  const a = alvoArrasto(e);
+  limparMarcas();
+  if (!a) return;
+  e.preventDefault();
+  const lista = arrasto.tipo === 'grupo' ? orc.grupos : orc.grupos[arrasto.gi].subgrupos;
+  const de = arrasto.tipo === 'grupo' ? arrasto.gi : arrasto.si;
+  let para = Number(arrasto.tipo === 'grupo' ? a.el.dataset.g : a.el.dataset.s) + (a.depois ? 1 : 0);
+  if (para > de) para--;
+  if (para === de) return;
+  mover(lista, de, para);
+  render();
+  marcarAlterado();
+});
+
+grupos.addEventListener('dragend', () => {
+  arrasto?.el.classList.remove('arrastando');
+  arrasto = null;
+  limparMarcas();
 });
 
 document.getElementById('btn-grupo').addEventListener('click', () => {

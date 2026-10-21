@@ -23,6 +23,8 @@ Mesmas da planilha original:
 
 Digitar o líquido ou o bruto marca a linha como manual (fundo amarelo): ela deixa de acompanhar o real e o markup. O botão ↺ volta a linha ao cálculo automático.
 
+Para mudar a ordem de grupos e subgrupos, arraste pela alça ⠿ ou use as setas ↑ ↓ ao lado do nome. Subgrupos mudam de lugar dentro do próprio grupo. A impressão, os indicadores e o Excel seguem a ordem da tela.
+
 **Usar como padrão** guarda empresa, logo, imposto e markup no navegador para os próximos orçamentos novos.
 
 A logo é reduzida para no máximo 400×200 px e fica dentro do próprio arquivo `.json`.
