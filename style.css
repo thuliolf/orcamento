@@ -1,20 +1,21 @@
 :root {
-  /* Identidade visual: cores da logo */
-  --marca: #3f0044;
-  --acento: #752da6;
-  --fundo: #f7f5f8;
+  /* Identidade visual padrão: a do site thulio.com.br (TL Tec) */
+  --marca: #272324;   /* grafite */
+  --acento: #00707f;  /* ciano escuro */
+  --faixa: #00e7ff;   /* ciano da marca, na faixa sob a barra do topo */
+  --fundo: #f4f8fa;
   --papel: #ffffff;
-  --texto: #1f2328;
-  --suave: #6b7078;
-  --linha: #e5e0e7;
+  --texto: #272324;
+  --suave: #5d6670;
+  --linha: #e2e8eb;
   --manual: #fff4d6;
   --perigo: #a33a2c;
   /* Cores dos gráficos (paleta validada para daltonismo) */
-  --serie-1: #752da6;
+  --serie-1: #2a78d6;
   --serie-2: #eb6834;
   --serie-3: #1baf7a;
-  --grade: #e6e1e8;
-  --realce: #f1eaf4; /* faixa dos grupos no Excel */
+  --grade: #e2e8eb;
+  --realce: #e3fafe; /* faixa dos grupos no Excel */
   /* Com uma logo carregada, identidade.js troca estas cores pelas da logo */
 }
 
@@ -60,7 +61,7 @@ input.manual { background: var(--manual); }
   display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
   padding: 10px 16px;
   background: var(--marca);
-  border-bottom: 3px solid var(--acento);
+  border-bottom: 3px solid var(--faixa);
   color: #fff;
 }
 .barra h1 { font-size: 17px; margin: 0; }

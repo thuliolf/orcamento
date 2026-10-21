@@ -3,7 +3,7 @@
 // e aplica nas variáveis do style.css. Sem logo, ou logo só em tons de cinza,
 // valem as cores padrão do style.css.
 
-const VARS_IDENTIDADE = ['--marca', '--acento', '--fundo', '--linha', '--grade', '--realce', '--serie-1'];
+const VARS_IDENTIDADE = ['--marca', '--acento', '--faixa', '--fundo', '--linha', '--grade', '--realce', '--serie-1'];
 const LARANJA = '#eb6834', VERDE = '#1baf7a', AZUL = '#2a78d6'; // --serie-2, --serie-3 e reserva
 
 // ---------- Conversões de cor ----------
@@ -100,6 +100,7 @@ function identidadeDaLogo(img) {
   return {
     '--marca': rgbHex(marca),
     '--acento': rgbHex(acento),
+    '--faixa': rgbHex(acento),
     '--fundo': rgbHex(misturar(marca, 0.965)),
     '--linha': rgbHex(misturar(marca, 0.88)),
     '--grade': rgbHex(misturar(marca, 0.9)),
