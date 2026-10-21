@@ -5,7 +5,8 @@
 const GC = {
   largura: 1000, margem: 48, linha: 40, barra: 22,
   fonte: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-  texto: '#1f2328', suave: '#6b7078', grade: '#e1e0d9', serie: '#2a78d6',
+  // Mesmas cores da identidade visual (style.css: --marca, --acento, --grade)
+  texto: '#1f2328', suave: '#6b7078', grade: '#e6e1e8', serie: '#752da6', marca: '#3f0044',
 };
 
 function carregarImagem(src) {
@@ -66,7 +67,7 @@ async function desenharGraficoCliente(canvas) {
 
   // Orçamento
   fonte(700, 26);
-  ctx.fillStyle = GC.texto;
+  ctx.fillStyle = GC.marca;
   ctx.fillText(cortarTexto(ctx, orc.identificacao || 'Orçamento', W - 2 * M), M, y + 15);
   y += 34;
   if (subtitulo) {
@@ -124,7 +125,7 @@ async function desenharGraficoCliente(canvas) {
 
   // Total
   y += 16;
-  ctx.fillStyle = GC.texto;
+  ctx.fillStyle = GC.marca;
   ctx.fillRect(M, y, W - 2 * M, 2);
   y += 24;
   fonte(700, 20);
