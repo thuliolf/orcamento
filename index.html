@@ -10,6 +10,10 @@
   <div class="app">
     <header class="barra">
       <h1>Orçamento de Eventos</h1>
+      <nav class="abas" role="tablist">
+        <button role="tab" data-aba="orcamento" aria-selected="true">Orçamento</button>
+        <button role="tab" data-aba="indicadores" aria-selected="false">Indicadores</button>
+      </nav>
       <nav>
         <button id="btn-novo">Novo</button>
         <button id="btn-abrir">Abrir…</button>
@@ -19,7 +23,7 @@
       </nav>
     </header>
 
-    <main>
+    <main id="aba-orcamento">
       <section class="cabecalho">
         <label>Identificação <input data-cab="identificacao" placeholder="Ex.: Festa de fim de ano 2026"></label>
         <label>Cliente <input data-cab="cliente"></label>
@@ -39,11 +43,15 @@
         <dl id="total"></dl>
       </section>
     </main>
+
+    <main id="aba-indicadores" hidden></main>
   </div>
 
   <div id="impressao"></div>
+  <div id="dica" role="tooltip" hidden></div>
 
   <script src="calc.js"></script>
   <script src="app.js"></script>
+  <script src="indicadores.js"></script>
 </body>
 </html>

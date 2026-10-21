@@ -150,6 +150,8 @@ function render() {
   }
   document.getElementById('grupos').innerHTML = orc.grupos.map(htmlGrupo).join('');
   atualizarNumeros();
+  // Abrir/Novo com a aba de indicadores visível (renderIndicadores vem de indicadores.js)
+  if (!document.getElementById('aba-indicadores').hidden) renderIndicadores();
 }
 
 function preencherTotais(raiz, prefixo, t) {

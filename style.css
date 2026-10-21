@@ -7,6 +7,11 @@
   --acento: #2f5d50;
   --manual: #fff4d6;
   --perigo: #a33a2c;
+  /* Cores dos gráficos (paleta validada para daltonismo) */
+  --serie-1: #2a78d6;
+  --serie-2: #eb6834;
+  --serie-3: #1baf7a;
+  --grade: #e1e0d9;
 }
 
 * { box-sizing: border-box; }
@@ -112,6 +117,96 @@ tfoot td { border-bottom: 0; background: var(--fundo); }
 .total-geral dt { color: var(--suave); }
 .total-geral dd { margin: 0; text-align: right; font-variant-numeric: tabular-nums; }
 .total-geral dd.destaque { font-weight: 700; }
+
+/* ---------- Abas ---------- */
+
+.abas { display: flex; gap: 4px; margin-right: auto; }
+.abas button { border-color: transparent; background: none; color: var(--suave); }
+.abas button[aria-selected="true"] { background: var(--fundo); border-color: var(--linha); color: var(--texto); font-weight: 600; }
+
+/* ---------- Indicadores ---------- */
+
+#aba-indicadores { max-width: 1040px; }
+.titulo-ind { font-size: 18px; margin: 4px 0 14px; }
+.vazio { color: var(--suave); padding: 40px 0; text-align: center; }
+
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.kpi {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  padding: 14px 16px;
+}
+.kpi .rotulo { color: var(--suave); font-size: 12px; }
+.kpi .valor { font-size: 22px; font-weight: 600; margin-top: 2px; }
+.kpi.heroi .valor { font-size: 30px; }
+.kpi .nota { color: var(--suave); font-size: 12px; margin-top: 2px; }
+
+.cartao {
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.cartao h3 { margin: 0; font-size: 15px; }
+.cartao .sub { margin: 2px 0 10px; color: var(--suave); font-size: 12px; }
+details.cartao summary { cursor: pointer; font-weight: 600; }
+details.cartao table { margin-top: 10px; }
+
+.legenda { list-style: none; display: flex; flex-wrap: wrap; gap: 16px; padding: 0; margin: 0 0 10px; font-size: 12px; color: var(--suave); }
+.legenda i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+
+.linha-graf {
+  display: grid;
+  grid-template-columns: minmax(110px, 200px) 1fr var(--col-valor);
+  gap: 12px;
+  align-items: center;
+  height: 30px;
+  border-radius: 4px;
+}
+/* Coluna de valor com largura fixa: todas as trilhas têm o mesmo comprimento (mesma escala) */
+.grafico.composicao { --col-valor: 10.5rem; }
+.grafico.pct { --col-valor: 4rem; }
+.linha-graf:hover, .linha-graf:focus { background: var(--fundo); outline: none; }
+.linha-graf .rot { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.linha-graf .val { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.linha-graf .val small { color: var(--suave); margin-left: 4px; }
+.trilha { position: relative; height: 100%; display: flex; align-items: center; }
+
+.barra-emp { display: flex; gap: 2px; height: 18px; border-radius: 0 4px 4px 0; overflow: hidden; min-width: 2px; }
+.seg { flex-basis: 0; min-width: 1px; }
+
+.barra-pct { position: absolute; height: 18px; background: var(--serie-1); border-radius: 0 4px 4px 0; }
+.barra-pct.negativa { border-radius: 4px 0 0 4px; }
+.media { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--texto); opacity: .55; }
+
+#dica {
+  position: fixed; z-index: 10; pointer-events: none;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+  padding: 8px 10px;
+  font-size: 12px;
+  min-width: 200px;
+}
+.dica-titulo { font-weight: 600; margin-bottom: 4px; }
+.dica-linha { display: grid; grid-template-columns: 12px auto 1fr; gap: 6px; align-items: center; }
+.dica-linha i { height: 2px; border-radius: 1px; }
+.dica-linha strong { font-variant-numeric: tabular-nums; }
+.dica-linha span { color: var(--suave); }
+
+@media (max-width: 640px) {
+  .linha-graf { grid-template-columns: 90px 1fr var(--col-valor); gap: 8px; }
+  .grafico.composicao { --col-valor: 6.5rem; }
+  .linha-graf .val small { display: none; }
+}
 
 /* ---------- Impressão ---------- */
 

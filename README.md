@@ -32,6 +32,17 @@ Mostra só o que é do cliente: quantidade, descrição e valor bruto, além de 
 - **linha por linha**: cada item com seu valor, e subtotal por subgrupo;
 - **valor único**: os itens listados sem valor e um só total para o grupo.
 
+## Indicadores
+
+A aba **Indicadores** resume o orçamento aberto:
+
+- valor ao cliente, custo dos fornecedores, imposto e lucro (em R$ e em % do valor);
+- valor ao cliente por grupo, com cada barra dividida em custo, imposto e lucro;
+- % de lucro por grupo, com uma linha marcando o % do evento inteiro;
+- os mesmos números em tabela.
+
+Grupos sem valor ficam de fora. Passe o mouse (ou navegue com Tab) sobre uma barra para ver os detalhes do grupo.
+
 ## Formato do arquivo
 
 ```json
@@ -65,6 +76,7 @@ Percentuais são guardados como número (`10` = 10%). Um subgrupo com nome vazio
 index.html          página
 style.css           estilos (tela e impressão)
 app.js              tela, abrir/salvar, impressão
+indicadores.js      aba de indicadores
 calc.js             regras de cálculo
 tests/              testes dos cálculos
 exemplos/           orçamento fictício
