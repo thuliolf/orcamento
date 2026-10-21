@@ -29,6 +29,8 @@ function novoOrcamento() {
   const p = lerPadroes();
   return {
     versao: 1,
+    empresa: p.empresa ?? '',
+    logo: p.logo ?? null,
     identificacao: '', cliente: '', data: '', local: '',
     imposto: p.imposto ?? 10,
     markup: p.markup ?? 0,
@@ -146,8 +148,9 @@ function htmlGrupo(g, gi) {
 function render() {
   for (const el of document.querySelectorAll('[data-cab]')) {
     const k = el.dataset.cab;
-    el.value = (k === 'imposto' || k === 'markup') ? numCampo(orc[k], 0) : orc[k];
+    el.value = (k === 'imposto' || k === 'markup') ? numCampo(orc[k], 0) : (orc[k] ?? '');
   }
+  mostrarLogo();
   document.getElementById('grupos').innerHTML = orc.grupos.map(htmlGrupo).join('');
   atualizarNumeros();
   // Abrir/Novo com a aba de indicadores visível (renderIndicadores vem de indicadores.js)
@@ -301,12 +304,69 @@ document.getElementById('btn-grupo').addEventListener('click', () => {
 
 document.getElementById('btn-padrao').addEventListener('click', e => {
   try {
-    localStorage.setItem(CHAVE_PADROES, JSON.stringify({ imposto: orc.imposto, markup: orc.markup }));
+    localStorage.setItem(CHAVE_PADROES, JSON.stringify({
+      empresa: orc.empresa, logo: orc.logo, imposto: orc.imposto, markup: orc.markup,
+    }));
     e.target.textContent = 'Padrão salvo ✓';
   } catch {
     e.target.textContent = 'Não foi possível salvar';
   }
   setTimeout(() => { e.target.textContent = 'Usar como padrão'; }, 2000);
+});
+
+// ---------- Logo da empresa ----------
+// Fica dentro do JSON como imagem PNG embutida, reduzida para no máximo 400×200.
+
+// Só aceita imagem embutida (arquivos de fora podem trazer qualquer texto no campo).
+function logoValida(logo) {
+  return typeof logo === 'string' && logo.startsWith('data:image/') ? logo : null;
+}
+
+function mostrarLogo() {
+  const img = document.getElementById('logo-previa');
+  const logo = logoValida(orc.logo);
+  img.hidden = !logo;
+  if (logo) img.src = logo; else img.removeAttribute('src');
+  document.getElementById('btn-logo-remover').hidden = !logo;
+  document.getElementById('btn-logo').textContent = logo ? 'Trocar…' : 'Carregar…';
+}
+
+function reduzirImagem(arquivo) {
+  return new Promise((ok, falha) => {
+    const img = new Image();
+    img.onload = () => {
+      const escala = Math.min(1, 400 / img.width, 200 / img.height);
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * escala);
+      c.height = Math.round(img.height * escala);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(img.src);
+      ok(c.toDataURL('image/png'));
+    };
+    img.onerror = falha;
+    img.src = URL.createObjectURL(arquivo);
+  });
+}
+
+document.getElementById('btn-logo').addEventListener('click', () => document.getElementById('logo-arquivo').click());
+
+document.getElementById('logo-arquivo').addEventListener('change', async e => {
+  const arquivo = e.target.files[0];
+  e.target.value = '';
+  if (!arquivo) return;
+  try {
+    orc.logo = await reduzirImagem(arquivo);
+    mostrarLogo();
+    marcarAlterado();
+  } catch {
+    alert('Não foi possível ler esta imagem.');
+  }
+});
+
+document.getElementById('btn-logo-remover').addEventListener('click', () => {
+  orc.logo = null;
+  mostrarLogo();
+  marcarAlterado();
 });
 
 // ---------- Novo / abrir / salvar ----------
@@ -341,11 +401,15 @@ document.getElementById('arquivo').addEventListener('change', async e => {
   }
 });
 
-function nomeArquivo() {
+function nomeBase() {
   const base = (orc.identificacao || 'orcamento')
     .normalize('NFD').replace(/[̀-ͯ]/g, '')
     .replace(/\W+/g, '-').replace(/^-+|-+$/g, '').toLowerCase();
-  return (base || 'orcamento') + '.json';
+  return base || 'orcamento';
+}
+
+function nomeArquivo() {
+  return nomeBase() + '.json';
 }
 
 document.getElementById('btn-salvar').addEventListener('click', () => {
@@ -405,7 +469,14 @@ function htmlImpressaoGrupo(g) {
 function montarImpressao() {
   const campos = [['Cliente', orc.cliente], ['Data', dataBR(orc.data)], ['Horário e local', orc.local]]
     .filter(([, v]) => v).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('');
+  const logo = logoValida(orc.logo);
+  const empresa = (logo || orc.empresa) ? `
+    <div class="imp-empresa">
+      ${logo ? `<img src="${esc(logo)}" alt="">` : ''}
+      ${orc.empresa ? `<strong>${esc(orc.empresa)}</strong>` : ''}
+    </div>` : '';
   document.getElementById('impressao').innerHTML = `
+    ${empresa}
     <header>
       <h1>${esc(orc.identificacao || 'Orçamento')}</h1>
       <dl>${campos}</dl>

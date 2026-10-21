@@ -23,11 +23,13 @@ Mesmas da planilha original:
 
 Digitar o líquido ou o bruto marca a linha como manual (fundo amarelo): ela deixa de acompanhar o real e o markup. O botão ↺ volta a linha ao cálculo automático.
 
-**Usar como padrão** guarda imposto e markup no navegador para os próximos orçamentos novos.
+**Usar como padrão** guarda empresa, logo, imposto e markup no navegador para os próximos orçamentos novos.
+
+A logo é reduzida para no máximo 400×200 px e fica dentro do próprio arquivo `.json`.
 
 ## Impressão
 
-Mostra só o que é do cliente: quantidade, descrição e valor bruto, além de um total por grupo e um total geral. Em cada grupo, "Na impressão" escolhe entre:
+Mostra só o que é do cliente: logo e nome da empresa, quantidade, descrição e valor bruto, além de um total por grupo e um total geral. A página não deixa o navegador imprimir o cabeçalho e o rodapé dele (endereço do site, título, data). Em cada grupo, "Na impressão" escolhe entre:
 
 - **linha por linha**: cada item com seu valor, e subtotal por subgrupo;
 - **valor único**: os itens listados sem valor e um só total para o grupo.
@@ -39,7 +41,8 @@ A aba **Indicadores** resume o orçamento aberto:
 - valor ao cliente, custo dos fornecedores, imposto e lucro (em R$ e em % do valor);
 - valor ao cliente por grupo, com cada barra dividida em custo, imposto e lucro;
 - % de lucro por grupo, com uma linha marcando o % do evento inteiro;
-- os mesmos números em tabela.
+- os mesmos números em tabela;
+- **gráfico para o cliente**: só o valor de cada grupo e a fatia do total, com logo e nome da empresa, sem custo, imposto nem lucro. O botão **Baixar imagem** salva em PNG.
 
 Grupos sem valor ficam de fora. Passe o mouse (ou navegue com Tab) sobre uma barra para ver os detalhes do grupo.
 
@@ -48,6 +51,7 @@ Grupos sem valor ficam de fora. Passe o mouse (ou navegue com Tab) sobre uma bar
 ```json
 {
   "versao": 1,
+  "empresa": "...", "logo": "data:image/png;base64,... (ou null)",
   "identificacao": "...", "cliente": "...", "data": "2026-12-12", "local": "...",
   "imposto": 10,
   "markup": 30,
@@ -77,6 +81,7 @@ index.html          página
 style.css           estilos (tela e impressão)
 app.js              tela, abrir/salvar, impressão
 indicadores.js      aba de indicadores
+grafico-cliente.js  gráfico para o cliente (PNG)
 calc.js             regras de cálculo
 tests/              testes dos cálculos
 exemplos/           orçamento fictício

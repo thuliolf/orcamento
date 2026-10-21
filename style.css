@@ -78,6 +78,10 @@ main { max-width: 1240px; margin: 0 auto; padding: 16px; }
 .cabecalho input { color: var(--texto); font-size: 14px; }
 .cabecalho input.num { width: 100%; }
 .cabecalho button { justify-self: start; }
+.campo-logo { display: flex; flex-direction: column; gap: 4px; color: var(--suave); font-size: 12px; }
+.campo-logo > div { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; min-height: 32px; }
+.campo-logo img { max-height: 32px; max-width: 120px; object-fit: contain; }
+.campo-logo button { font-size: 14px; }
 
 .grupo {
   background: var(--papel);
@@ -157,6 +161,8 @@ tfoot td { border-bottom: 0; background: var(--fundo); }
 .cartao h3 { margin: 0; font-size: 15px; }
 .cartao .sub { margin: 2px 0 10px; color: var(--suave); font-size: 12px; }
 details.cartao summary { cursor: pointer; font-weight: 600; }
+.cartao-cab { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.grafico-cliente { display: block; width: 100%; height: auto; margin-top: 12px; border: 1px solid var(--linha); border-radius: 6px; }
 details.cartao table { margin-top: 10px; }
 
 .legenda { list-style: none; display: flex; flex-wrap: wrap; gap: 16px; padding: 0; margin: 0 0 10px; font-size: 12px; color: var(--suave); }
@@ -213,11 +219,25 @@ details.cartao table { margin-top: 10px; }
 #impressao { display: none; }
 
 @media print {
-  @page { margin: 18mm 16mm; }
+  /* Margem zero na página faz o navegador não imprimir cabeçalho e rodapé
+     (endereço do site, título, data). A margem fica no conteúdo, repetida em cada página. */
+  @page { margin: 0; }
   body { background: #fff; font-size: 11pt; }
   .app { display: none; }
-  #impressao { display: block; }
+  #impressao {
+    display: block;
+    padding: 18mm 16mm;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+  }
 
+  .imp-empresa {
+    display: flex; align-items: center; gap: 12pt;
+    padding-bottom: 10pt; margin-bottom: 14pt;
+    border-bottom: 0.5pt solid #ccc;
+  }
+  .imp-empresa img { max-height: 16mm; max-width: 60mm; object-fit: contain; }
+  .imp-empresa strong { font-size: 13pt; }
   #impressao h1 { font-size: 18pt; margin: 0 0 6pt; }
   #impressao header dl { display: grid; grid-template-columns: max-content 1fr; gap: 2pt 12pt; margin: 0 0 16pt; }
   #impressao header dt { color: #555; }

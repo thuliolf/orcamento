@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Orçamento de Eventos</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=3">
 </head>
 <body>
   <div class="app">
@@ -25,6 +25,16 @@
 
     <main id="aba-orcamento">
       <section class="cabecalho">
+        <label>Empresa <input data-cab="empresa" placeholder="Nome da sua empresa"></label>
+        <div class="campo-logo">
+          <span>Logo da empresa</span>
+          <div>
+            <img id="logo-previa" alt="Logo" hidden>
+            <button id="btn-logo" class="discreto">Carregar…</button>
+            <button id="btn-logo-remover" class="discreto perigo" hidden>Remover</button>
+            <input type="file" id="logo-arquivo" accept="image/*" hidden>
+          </div>
+        </div>
         <label>Identificação <input data-cab="identificacao" placeholder="Ex.: Festa de fim de ano 2026"></label>
         <label>Cliente <input data-cab="cliente"></label>
         <label>Data do evento <input type="date" data-cab="data"></label>
@@ -32,7 +42,7 @@
         <label>Imposto (%) <input data-cab="imposto" class="num" inputmode="decimal"></label>
         <label>Markup padrão (%) <input data-cab="markup" class="num" inputmode="decimal"
           title="Usado para calcular o valor cobrado a partir do valor real"></label>
-        <button id="btn-padrao" class="discreto" title="Novos orçamentos começam com este imposto e markup">Usar como padrão</button>
+        <button id="btn-padrao" class="discreto" title="Novos orçamentos começam com esta empresa, logo, imposto e markup">Usar como padrão</button>
       </section>
 
       <div id="grupos"></div>
@@ -50,8 +60,9 @@
   <div id="impressao"></div>
   <div id="dica" role="tooltip" hidden></div>
 
-  <script src="calc.js?v=2"></script>
-  <script src="app.js?v=2"></script>
-  <script src="indicadores.js?v=2"></script>
+  <script src="calc.js?v=3"></script>
+  <script src="app.js?v=3"></script>
+  <script src="indicadores.js?v=3"></script>
+  <script src="grafico-cliente.js?v=3"></script>
 </body>
 </html>

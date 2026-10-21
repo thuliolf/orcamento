@@ -86,6 +86,17 @@ function renderIndicadores() {
       <div class="grafico pct">${porPct.map(({ g, gi }) => htmlPct(g, gi, min, max, t.pct)).join('')}</div>
     </section>
 
+    <section class="cartao">
+      <div class="cartao-cab">
+        <div>
+          <h3>Gráfico para o cliente</h3>
+          <p class="sub">Só o valor de cada grupo e a fatia do total, com impostos inclusos. Sem custo, imposto nem lucro.</p>
+        </div>
+        <button id="btn-baixar-grafico" class="principal">Baixar imagem</button>
+      </div>
+      <canvas id="grafico-cliente" class="grafico-cliente"></canvas>
+    </section>
+
     <details class="cartao">
       <summary>Ver em tabela</summary>
       <div class="rolagem">
@@ -102,6 +113,7 @@ function renderIndicadores() {
         </table>
       </div>
     </details>`;
+  desenharGraficoCliente(document.getElementById('grafico-cliente')); // grafico-cliente.js
 }
 
 // ---------- Dica ao passar o mouse ou focar uma linha do gráfico ----------
