@@ -31,7 +31,7 @@ A logo é reduzida para no máximo 400×200 px e fica dentro do próprio arquivo
 
 ### Cores a partir da logo
 
-Com uma logo carregada, a página assume duas cores dela: a mais escura vira a cor principal (barra do topo, títulos, impressão, Excel) e a outra, a de destaque (botões, links, gráficos). Fundo, branco, preto e cinzas da imagem são ignorados. Cores claras demais são escurecidas no mesmo tom para manter o texto legível; uma logo de uma cor só ganha uma segunda cor derivada dela. No gráfico de composição, a cor de destaque só entra se for da faixa azul–roxo (para não se confundir com o laranja do imposto e o verde do lucro); senão, ele usa azul. Sem logo, ou com logo só em preto, branco e cinza, vale a identidade padrão, a mesma do site thulio.com.br (grafite e ciano).
+Com uma logo carregada, a página assume duas cores dela: a mais escura vira a cor principal (barra do topo, títulos, impressão, Excel) e a outra, a de destaque (botões, links, gráficos). Fundo, branco, preto e cinzas da imagem são ignorados. Cores claras demais são escurecidas no mesmo tom para manter o texto legível; uma logo de uma cor só ganha uma segunda cor derivada dela. Os gráficos internos de indicadores (composição e % de lucro) mantêm sempre as mesmas cores (azul, laranja e verde), para não repetir cor entre custo, imposto e lucro. Sem logo, ou com logo só em preto, branco e cinza, vale a identidade padrão, a mesma do site thulio.com.br (grafite e ciano).
 
 ## Impressão
 

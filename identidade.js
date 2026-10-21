@@ -3,12 +3,11 @@
 // e aplica nas variáveis do style.css. Sem logo, ou logo só em tons de cinza,
 // valem as cores padrão do style.css.
 
-const VARS_IDENTIDADE = ['--marca', '--acento', '--faixa', '--fundo', '--linha', '--grade', '--realce', '--serie-1'];
-const LARANJA = '#eb6834', VERDE = '#1baf7a', AZUL = '#2a78d6'; // --serie-2, --serie-3 e reserva
+// As cores dos gráficos de indicadores (--serie-*) ficam fixas, para nunca repetir cor entre custo, imposto e lucro.
+const VARS_IDENTIDADE = ['--marca', '--acento', '--faixa', '--fundo', '--linha', '--grade', '--realce'];
 
 // ---------- Conversões de cor ----------
 
-const hexRgb = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 const rgbHex = c => '#' + c.map(v => Math.round(Math.min(255, Math.max(0, v))).toString(16).padStart(2, '0')).join('');
 const linear = v => (v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
 const gama = v => 255 * (v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055);
@@ -90,12 +89,6 @@ function identidadeDaLogo(img) {
 
   const marca = escurecer(escura.map(Math.round), 7);    // barra do topo com texto branco
   const acento = escurecer(clara.map(Math.round), 4.5);  // botões com texto branco e links sobre branco
-  // Gráfico de composição: o destaque só entra se for da faixa azul–roxo (a faixa validada para daltônicos
-  // ao lado do laranja do imposto e do verde do lucro) e bem diferente dos dois; senão, azul.
-  const [, ca, cb] = oklab(acento);
-  const matiz = (Math.atan2(cb, ca) * 180 / Math.PI + 360) % 360;
-  const serie1 = matiz >= 240 && matiz <= 330 && [LARANJA, VERDE].every(h => distancia(acento, hexRgb(h)) >= 0.15)
-    ? acento : hexRgb(AZUL);
 
   return {
     '--marca': rgbHex(marca),
@@ -105,7 +98,6 @@ function identidadeDaLogo(img) {
     '--linha': rgbHex(misturar(marca, 0.88)),
     '--grade': rgbHex(misturar(marca, 0.9)),
     '--realce': rgbHex(misturar(marca, 0.9)),
-    '--serie-1': rgbHex(serie1),
   };
 }
 
