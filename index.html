@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Orçamento de Eventos</title>
-  <link rel="stylesheet" href="style.css?v=5">
+  <link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
   <div class="app">
@@ -19,6 +19,7 @@
         <button id="btn-abrir">Abrir…</button>
         <button id="btn-salvar" class="principal">Salvar</button>
         <button id="btn-imprimir">Imprimir</button>
+        <button id="btn-excel" title="Baixa o orçamento completo (com custo, imposto e lucro) em .xlsx">Excel</button>
         <input type="file" id="arquivo" accept=".json,application/json" hidden>
       </nav>
     </header>
@@ -60,9 +61,10 @@
   <div id="impressao"></div>
   <div id="dica" role="tooltip" hidden></div>
 
-  <script src="calc.js?v=5"></script>
-  <script src="app.js?v=5"></script>
-  <script src="indicadores.js?v=5"></script>
-  <script src="grafico-cliente.js?v=5"></script>
+  <script src="calc.js?v=6"></script>
+  <script src="app.js?v=6"></script>
+  <script src="indicadores.js?v=6"></script>
+  <script src="grafico-cliente.js?v=6"></script>
+  <script src="excel.js?v=6"></script>
 </body>
 </html>

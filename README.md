@@ -34,6 +34,10 @@ Mostra só o que é do cliente: logo e nome da empresa, quantidade, descrição 
 - **linha por linha**: cada item com seu valor, e subtotal por subgrupo;
 - **valor único**: os itens listados sem valor e um só total para o grupo.
 
+## Excel
+
+O botão **Excel** baixa o orçamento completo em `.xlsx`, para uso interno: real, cobrado líquido, imposto, cobrado bruto, lucro e % por linha, com subtotais, total por grupo e total geral. Imposto, bruto, lucro, % e totais são fórmulas; o imposto fica numa célula no topo e, ao mudar, a planilha recalcula. O arquivo é gerado na própria página, sem enviar dados para lugar nenhum.
+
 ## Indicadores
 
 A aba **Indicadores** resume o orçamento aberto:
@@ -82,6 +86,7 @@ style.css           estilos (tela e impressão)
 app.js              tela, abrir/salvar, impressão
 indicadores.js      aba de indicadores
 grafico-cliente.js  gráfico para o cliente (PNG)
+excel.js            exportação para Excel (.xlsx)
 calc.js             regras de cálculo
 tests/              testes dos cálculos
 exemplos/           orçamento fictício
