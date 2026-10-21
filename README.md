@@ -29,6 +29,10 @@ Para mudar a ordem de grupos e subgrupos, arraste pela alça ⠿ ou use as setas
 
 A logo é reduzida para no máximo 400×200 px e fica dentro do próprio arquivo `.json`.
 
+### Cores a partir da logo
+
+Com uma logo carregada, a página assume duas cores dela: a mais escura vira a cor principal (barra do topo, títulos, impressão, Excel) e a outra, a de destaque (botões, links, gráficos). Fundo, branco, preto e cinzas da imagem são ignorados. Cores claras demais são escurecidas no mesmo tom para manter o texto legível; uma logo de uma cor só ganha uma segunda cor derivada dela. No gráfico de composição, a cor de destaque só entra se for da faixa azul–roxo (para não se confundir com o laranja do imposto e o verde do lucro); senão, ele usa azul. Sem logo, ou com logo só em preto, branco e cinza, vale a identidade padrão (roxo).
+
 ## Impressão
 
 Mostra só o que é do cliente: logo e nome da empresa, quantidade, descrição e valor bruto, além de um total por grupo e um total geral. A página não deixa o navegador imprimir o cabeçalho e o rodapé dele (endereço do site, título, data). Em cada grupo, "Na impressão" escolhe entre:
@@ -89,6 +93,7 @@ app.js              tela, abrir/salvar, impressão
 indicadores.js      aba de indicadores
 grafico-cliente.js  gráfico para o cliente (PNG)
 excel.js            exportação para Excel (.xlsx)
+identidade.js       cores da página a partir da logo
 calc.js             regras de cálculo
 tests/              testes dos cálculos
 exemplos/           orçamento fictício

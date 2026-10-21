@@ -14,6 +14,8 @@
   --serie-2: #eb6834;
   --serie-3: #1baf7a;
   --grade: #e6e1e8;
+  --realce: #f1eaf4; /* faixa dos grupos no Excel */
+  /* Com uma logo carregada, identidade.js troca estas cores pelas da logo */
 }
 
 * { box-sizing: border-box; }

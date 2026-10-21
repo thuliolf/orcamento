@@ -60,30 +60,30 @@ function zip(arquivos) {
 
 // ---------- Planilha ----------
 
-// Estilos (índices de cellXfs em ESTILOS_XML)
+// Estilos (índices de cellXfs em estilosXml)
 const S = { normal: 0, negrito: 1, cabecalho: 2, grupo: 3, moeda: 4, pct: 5, totalMoeda: 6, totalPct: 7,
   titulo: 8, subgrupo: 9, totalTexto: 10, cabecalhoNum: 11, pctEsquerda: 12 };
 
-const ESTILOS_XML = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+const estilosXml = (marca, realce) => `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">
 <numFmts count="2"><numFmt numFmtId="164" formatCode="&quot;R$&quot; #,##0.00"/><numFmt numFmtId="165" formatCode="0.0%"/></numFmts>
 <fonts count="6">
 <font><sz val="11"/><name val="Calibri"/></font>
 <font><b/><sz val="11"/><name val="Calibri"/></font>
 <font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font>
-<font><b/><sz val="11"/><color rgb="FF3F0044"/><name val="Calibri"/></font>
-<font><b/><sz val="14"/><color rgb="FF3F0044"/><name val="Calibri"/></font>
+<font><b/><sz val="11"/><color rgb="${marca}"/><name val="Calibri"/></font>
+<font><b/><sz val="14"/><color rgb="${marca}"/><name val="Calibri"/></font>
 <font><i/><sz val="11"/><color rgb="FF6B7078"/><name val="Calibri"/></font>
 </fonts>
 <fills count="4">
 <fill><patternFill patternType="none"/></fill>
 <fill><patternFill patternType="gray125"/></fill>
-<fill><patternFill patternType="solid"><fgColor rgb="FF3F0044"/><bgColor indexed="64"/></patternFill></fill>
-<fill><patternFill patternType="solid"><fgColor rgb="FFF1EAF4"/><bgColor indexed="64"/></patternFill></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="${marca}"/><bgColor indexed="64"/></patternFill></fill>
+<fill><patternFill patternType="solid"><fgColor rgb="${realce}"/><bgColor indexed="64"/></patternFill></fill>
 </fills>
 <borders count="2">
 <border><left/><right/><top/><bottom/><diagonal/></border>
-<border><left/><right/><top style="thin"><color rgb="FF3F0044"/></top><bottom/><diagonal/></border>
+<border><left/><right/><top style="thin"><color rgb="${marca}"/></top><bottom/><diagonal/></border>
 </borders>
 <cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>
 <cellXfs count="13">
@@ -120,6 +120,9 @@ function celula(ref, valor, s) {
   }
   return `<c r="${ref}" s="${s}" t="inlineStr"><is><t xml:space="preserve">${xml(valor)}</t></is></c>`;
 }
+
+// Cor do tema atual no formato do Excel: #3f0044 → FF3F0044
+const argb = nome => 'FF' + corDoTema(nome).slice(1).toUpperCase();
 
 function montarPlanilha() {
   const linhas = [];
@@ -209,7 +212,7 @@ function montarPlanilha() {
 <Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>
 </Relationships>`],
     ['xl/worksheets/sheet1.xml', folha],
-    ['xl/styles.xml', ESTILOS_XML],
+    ['xl/styles.xml', estilosXml(argb('--marca'), argb('--realce'))],
   ]);
 }
 

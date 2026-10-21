@@ -420,6 +420,7 @@ function mostrarLogo() {
   if (logo) img.src = logo; else img.removeAttribute('src');
   document.getElementById('btn-logo-remover').hidden = !logo;
   document.getElementById('btn-logo').textContent = logo ? 'Trocar…' : 'Carregar…';
+  aplicarIdentidade(); // identidade.js: cores da página a partir da logo
 }
 
 function reduzirImagem(arquivo) {

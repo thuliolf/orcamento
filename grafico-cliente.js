@@ -5,8 +5,7 @@
 const GC = {
   largura: 1000, margem: 48, linha: 40, barra: 22,
   fonte: 'system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
-  // Mesmas cores da identidade visual (style.css: --marca, --acento, --grade)
-  texto: '#1f2328', suave: '#6b7078', grade: '#e6e1e8', serie: '#752da6', marca: '#3f0044',
+  texto: '#1f2328', suave: '#6b7078', // serie, marca e grade vêm da identidade visual ao desenhar
 };
 
 function carregarImagem(src) {
@@ -30,6 +29,8 @@ async function desenharGraficoCliente(canvas) {
   const total = totaisOrcamento(orc).bruto;
   const logo = await carregarImagem(logoValida(orc.logo));
   const { largura: W, margem: M, linha: L, barra: B } = GC;
+  // Cores da identidade visual atual (identidade.js / style.css)
+  GC.serie = corDoTema('--acento'); GC.marca = corDoTema('--marca'); GC.grade = corDoTema('--grade');
   const subtitulo = [orc.cliente, dataBR(orc.data), orc.local].filter(Boolean).join('   ·   ');
 
   // Logo com no máximo 56 px de altura e 220 px de largura
