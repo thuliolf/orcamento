@@ -170,6 +170,8 @@ tfoot td { border-bottom: 0; background: var(--fundo); }
 .kpi.heroi { border-top: 3px solid var(--acento); }
 .kpi.heroi .valor { font-size: 30px; color: var(--marca); }
 .kpi .nota { color: var(--suave); font-size: 12px; margin-top: 2px; }
+.kpi { min-width: 0; }
+.kpi .valor { overflow-wrap: anywhere; } /* número grande quebra em vez de vazar do cartão */
 
 .cartao {
   background: var(--papel);
@@ -232,6 +234,65 @@ details.cartao table { margin-top: 10px; }
   .linha-graf { grid-template-columns: 90px 1fr var(--col-valor); gap: 8px; }
   .grafico.composicao { --col-valor: 6.5rem; }
   .linha-graf .val small { display: none; }
+}
+
+/* ---------- Celular: cabeçalho compacto e linhas da tabela como cartões ---------- */
+
+@media (max-width: 760px) {
+  main { padding: 10px; }
+  input, select, button { font-size: 16px; } /* com menos de 16px o iPhone dá zoom ao tocar no campo */
+
+  .barra { position: static; padding: 10px 12px; gap: 8px; }
+  .barra h1 { font-size: 16px; flex-basis: 100%; }
+  .barra nav { gap: 6px; }
+  .barra nav button { padding: 6px 10px; }
+
+  .cabecalho { grid-template-columns: 1fr 1fr; padding: 12px; }
+  .cabecalho label:has(input:not(.num):not([type="date"])), .campo-logo { grid-column: 1 / -1; }
+
+  .grupo-cab { padding: 10px; gap: 6px; }
+  .grupo-cab .nome-grupo { flex-basis: 100%; order: -1; }
+
+  .grupo .rolagem { overflow: visible; }
+  .grupo table, .grupo tbody, .grupo tfoot, .grupo tr, .grupo td { display: block; }
+  .grupo thead { display: none; }
+  .grupo tr[hidden] { display: none; }
+  .grupo tr[data-i], .grupo tr.subtotal, .grupo tfoot tr {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    padding: 12px;
+    border-bottom: 1px solid var(--linha);
+  }
+  .grupo tr.subtotal[hidden] { display: none; } /* precisa vir depois da regra de grade acima */
+  .grupo td { border: 0; padding: 0; white-space: normal; }
+  .grupo td.num { text-align: left; }
+  .grupo td[data-rotulo]::before {
+    content: attr(data-rotulo);
+    display: block;
+    margin-bottom: 2px;
+    font-size: 11px; font-weight: 400; color: var(--suave);
+  }
+  .grupo td.col-descricao { grid-column: 1 / -1; order: -1; }
+  .grupo td.col-descricao::before { display: none; }
+  .grupo td input.num, .grupo td input.curto, .grupo td input.descricao { width: 100%; min-width: 0; }
+  .grupo td.acoes { align-self: end; text-align: right; }
+  .grupo tr.subtotal td:empty, .grupo tfoot td:empty { display: none; }
+  .grupo tr.subtotal td:nth-child(2), .grupo tfoot td:nth-child(2) { grid-column: 1 / -1; }
+  .grupo .sub-cab td { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px 10px; }
+  .grupo .sub-cab input { flex: 1 1 100%; width: auto; order: -1; }
+
+  .total-geral dl { grid-template-columns: 1fr max-content; }
+
+  .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { padding: 12px; }
+  .kpi.heroi { grid-column: 1 / -1; }
+  .kpi .valor { font-size: 19px; }
+}
+
+/* Telas bem estreitas (iPhone SE): um cartão de destaque por linha, para o valor não quebrar no meio */
+@media (max-width: 400px) {
+  .kpis { grid-template-columns: 1fr; }
 }
 
 /* ---------- Impressão ---------- */

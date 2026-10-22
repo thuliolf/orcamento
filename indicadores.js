@@ -161,6 +161,8 @@ abaInd.addEventListener('focusin', e => {
   mostrarDica(linha, r.left + r.width / 2, r.bottom);
 });
 abaInd.addEventListener('focusout', () => { dica.hidden = true; });
+// No celular a dica aparece no toque e não tem "tirar o mouse": some ao rolar
+addEventListener('scroll', () => { dica.hidden = true; }, { passive: true });
 
 // ---------- Abas ----------
 

@@ -81,14 +81,14 @@ const COLUNAS = 9;
 function htmlItem(i, ii) {
   return `
     <tr data-i="${ii}">
-      <td><input data-campo="quantidade" class="num curto" inputmode="decimal" value="${esc(numCampo(i.quantidade, 0))}"></td>
-      <td><input data-campo="descricao" class="descricao" value="${esc(i.descricao)}" placeholder="Descrição"></td>
-      <td><input data-campo="real" class="num" inputmode="decimal" value="${esc(numCampo(i.real))}" placeholder="—"></td>
-      <td><input data-campo="liquido" class="num" inputmode="decimal"></td>
-      <td class="num" data-v="imposto"></td>
-      <td><input data-campo="bruto" class="num" inputmode="decimal"></td>
-      <td class="num" data-v="lucro"></td>
-      <td class="num" data-v="pct"></td>
+      <td data-rotulo="Qtd"><input data-campo="quantidade" class="num curto" inputmode="decimal" value="${esc(numCampo(i.quantidade, 0))}"></td>
+      <td data-rotulo="Descrição" class="col-descricao"><input data-campo="descricao" class="descricao" value="${esc(i.descricao)}" placeholder="Descrição"></td>
+      <td data-rotulo="Real"><input data-campo="real" class="num" inputmode="decimal" value="${esc(numCampo(i.real))}" placeholder="—"></td>
+      <td data-rotulo="Cobrado líquido"><input data-campo="liquido" class="num" inputmode="decimal"></td>
+      <td data-rotulo="Imposto" class="num" data-v="imposto"></td>
+      <td data-rotulo="Cobrado bruto"><input data-campo="bruto" class="num" inputmode="decimal"></td>
+      <td data-rotulo="Lucro" class="num" data-v="lucro"></td>
+      <td data-rotulo="% Lucro" class="num" data-v="pct"></td>
       <td class="acoes">
         <button data-acao="recalcular" class="discreto" title="Voltar ao cálculo pelo valor real">↺</button>
         <button data-acao="item-remover" class="discreto" title="Remover linha">×</button>
@@ -97,8 +97,9 @@ function htmlItem(i, ii) {
 }
 
 function htmlTotais(prefixo) {
-  return ['real', 'liquido', 'imposto', 'bruto', 'lucro', 'pct']
-    .map(k => `<td class="num" data-${prefixo}="${k}"></td>`).join('');
+  const rotulos = { real: 'Real', liquido: 'Cobrado líquido', imposto: 'Imposto', bruto: 'Cobrado bruto', lucro: 'Lucro', pct: '% Lucro' };
+  return Object.entries(rotulos)
+    .map(([k, r]) => `<td class="num" data-rotulo="${r}" data-${prefixo}="${k}"></td>`).join('');
 }
 
 // Alça para arrastar + setas para subir/descer
@@ -504,14 +505,34 @@ function nomeArquivo() {
   return nomeBase() + '.json';
 }
 
-document.getElementById('btn-salvar').addEventListener('click', () => {
-  const blob = new Blob([JSON.stringify(orc, null, 2)], { type: 'application/json' });
+// Entrega um arquivo gerado na página. No celular abre o menu de compartilhar do aparelho
+// ("Salvar em Arquivos", WhatsApp, e-mail...), porque navegadores dentro de apps como o
+// WhatsApp no iPhone não baixam arquivos gerados e só mostram o conteúdo. No computador, baixa.
+// Devolve false se a pessoa cancelou.
+async function entregarArquivo(blob, nome) {
+  const arquivo = new File([blob], nome, { type: blob.type });
+  if (matchMedia('(pointer: coarse)').matches && navigator.canShare?.({ files: [arquivo] })) {
+    try {
+      await navigator.share({ files: [arquivo] });
+      return true;
+    } catch (e) {
+      if (e.name === 'AbortError') return false;
+      // compartilhar falhou: tenta o download comum
+    }
+  }
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = nomeArquivo();
+  a.download = nome;
+  document.body.append(a);
   a.click();
-  URL.revokeObjectURL(a.href);
-  alterado = false;
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 60000); // o Safari ainda pode estar lendo
+  return true;
+}
+
+document.getElementById('btn-salvar').addEventListener('click', async () => {
+  const blob = new Blob([JSON.stringify(orc, null, 2)], { type: 'application/json' });
+  if (await entregarArquivo(blob, nomeArquivo())) alterado = false;
 });
 
 window.addEventListener('beforeunload', e => {

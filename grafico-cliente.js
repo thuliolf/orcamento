@@ -143,11 +143,8 @@ async function desenharGraficoCliente(canvas) {
 
 document.addEventListener('click', e => {
   if (e.target.id !== 'btn-baixar-grafico') return;
-  document.getElementById('grafico-cliente').toBlob(blob => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'grafico-' + nomeBase() + '.png';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }, 'image/png');
+  // Gera a imagem na hora do toque (sem esperar), senão o iPhone não abre o menu de compartilhar
+  const dados = atob(document.getElementById('grafico-cliente').toDataURL('image/png').split(',')[1]);
+  const bytes = Uint8Array.from(dados, c => c.charCodeAt(0));
+  entregarArquivo(new Blob([bytes], { type: 'image/png' }), 'grafico-' + nomeBase() + '.png'); // app.js
 });

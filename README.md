@@ -8,6 +8,8 @@ Não há servidor nem banco de dados. Cada orçamento é um arquivo `.json` que 
 
 Abra o `index.html` no navegador, com duplo clique mesmo. Para testar com dados, abra `exemplos/exemplo.json`.
 
+No celular, cada linha do orçamento aparece como um cartão, e **Salvar**, **Excel** e **Baixar imagem** abrem o menu de compartilhar do aparelho ("Salvar em Arquivos", WhatsApp, e-mail…) em vez de baixar, porque navegadores dentro de apps (como o do WhatsApp no iPhone) não baixam arquivos gerados pela página. No computador, os arquivos são baixados normalmente.
+
 ## Regras de cálculo
 
 Mesmas da planilha original:

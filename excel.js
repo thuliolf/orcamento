@@ -217,9 +217,5 @@ function montarPlanilha() {
 }
 
 document.getElementById('btn-excel').addEventListener('click', () => {
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(montarPlanilha());
-  a.download = nomeBase() + '.xlsx';
-  a.click();
-  URL.revokeObjectURL(a.href);
+  entregarArquivo(montarPlanilha(), nomeBase() + '.xlsx'); // app.js
 });
