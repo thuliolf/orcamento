@@ -1,4 +1,6 @@
-// Gráfico para enviar ao cliente: só o valor de cada grupo (com impostos) e a fatia do total.
+// Gráfico para enviar ao cliente: valores com impostos e a fatia do total, na ordem da tela.
+// Segue o "Na impressão" de cada grupo, como o relatório: "valor único" vira uma barra só;
+// "linha por linha" mostra o total do grupo e uma barra por item.
 // Nada de custo, imposto ou lucro aqui. Desenhado em canvas para baixar como PNG;
 // a prévia na tela é a mesma imagem que é baixada.
 
@@ -24,11 +26,31 @@ function cortarTexto(ctx, t, max) {
   return t + '…';
 }
 
+// Linhas do gráfico. Itens sem valor ficam de fora (não têm barra).
+function linhasGraficoCliente() {
+  const linhas = [];
+  for (const g of orc.grupos) {
+    const valor = totaisGrupo(g, orc.imposto).bruto;
+    if (valor <= 0) continue;
+    const nome = g.nome || 'Sem nome';
+    if (g.impressao === 'resumido') { linhas.push({ tipo: 'grupo', nome, valor, barra: true }); continue; }
+    linhas.push({ tipo: 'titulo', nome, valor, barra: false });
+    for (const s of g.subgrupos)
+      for (const i of s.itens) {
+        const v = calcularItem(i, orc.imposto).bruto;
+        if (v > 0) linhas.push({ tipo: 'item', nome: i.descricao.trim() || 'Sem descrição', valor: v, barra: true });
+      }
+  }
+  return linhas;
+}
+
 async function desenharGraficoCliente(canvas) {
-  const grupos = dadosGrupos().sort((a, b) => b.bruto - a.bruto);
+  const linhas = linhasGraficoCliente();
+  const ALTURA = { grupo: GC.linha, titulo: 40, item: 34 };
+  const altLinhas = linhas.reduce((s, l) => s + ALTURA[l.tipo], 0);
   const total = totaisOrcamento(orc).bruto;
   const logo = await carregarImagem(logoValida(orc.logo));
-  const { largura: W, margem: M, linha: L, barra: B } = GC;
+  const { largura: W, margem: M, barra: B } = GC;
   // Cores da identidade visual atual (identidade.js / style.css)
   GC.serie = corDoTema('--acento'); GC.marca = corDoTema('--marca'); GC.grade = corDoTema('--grade');
   const subtitulo = [orc.cliente, dataBR(orc.data), orc.local].filter(Boolean).join('   ·   ');
@@ -38,7 +60,7 @@ async function desenharGraficoCliente(canvas) {
   const lw = logo ? logo.width * lh / logo.height : 0;
   const topo = logo || orc.empresa ? Math.max(lh, 28) + 32 : 0;
 
-  const altura = M + topo + 34 + (subtitulo ? 26 : 0) + 30 + 30 + grupos.length * L + 16 + 44 + 24 + M;
+  const altura = M + topo + 34 + (subtitulo ? 26 : 0) + 30 + 30 + altLinhas + 16 + 44 + 24 + M;
   const escala = 2; // imagem nítida em telas de alta densidade e impressa
   canvas.width = W * escala;
   canvas.height = altura * escala;
@@ -82,46 +104,57 @@ async function desenharGraficoCliente(canvas) {
   y += 30;
   fonte(600, 16);
   ctx.fillStyle = GC.texto;
-  ctx.fillText('Valor por grupo', M, y);
+  ctx.fillText('Valores', M, y);
   y += 30;
 
-  const colRotulo = 230, colPct = 64, colValor = 150;
+  const colRotulo = 320, colPct = 64, colValor = 150;
   const x0 = M + colRotulo + 16;
   const trilha = W - M - colPct - colValor - 16 - x0;
-  const maior = Math.max(...grupos.map(g => g.bruto));
+  const maior = Math.max(...linhas.filter(l => l.barra).map(l => l.valor), 1);
 
   // Logo como marca-d'água no fundo da área do gráfico (barras + total), bem clara
   if (logo) {
-    const areaH = Math.max(grupos.length * L + 76, 160);
+    const areaH = Math.max(altLinhas + 76, 160);
     const e = Math.min((W - 2 * M) * 0.5 / logo.width, areaH * 0.8 / logo.height);
     ctx.globalAlpha = 0.08;
     ctx.drawImage(logo, (W - logo.width * e) / 2, y + (areaH - logo.height * e) / 2, logo.width * e, logo.height * e);
     ctx.globalAlpha = 1;
   }
 
-  ctx.fillStyle = GC.grade;
-  ctx.fillRect(x0, y, 1, grupos.length * L); // linha de base
+  for (const l of linhas) {
+    const h = ALTURA[l.tipo];
+    const meio = l.tipo === 'titulo' ? y + h - 15 : y + h / 2; // título fica perto dos seus itens
+    const recuo = l.tipo === 'item' ? 16 : 0;
+    const peso = l.tipo === 'item' ? 400 : 600;
+    const tamanho = l.tipo === 'item' ? 14 : 15;
 
-  for (const g of grupos) {
-    const meio = y + L / 2;
-    fonte(400, 15);
-    ctx.fillStyle = GC.texto;
+    fonte(peso, tamanho);
+    ctx.fillStyle = l.tipo === 'titulo' ? GC.marca : GC.texto;
     ctx.textAlign = 'left';
-    ctx.fillText(cortarTexto(ctx, g.nome, colRotulo), M, meio);
+    const largRotulo = l.barra ? colRotulo - recuo : x0 - M; // título sem barra usa a largura toda
+    ctx.fillText(cortarTexto(ctx, l.nome, largRotulo), M + recuo, meio);
 
-    ctx.fillStyle = GC.serie;
-    ctx.beginPath();
-    ctx.roundRect(x0 + 1, meio - B / 2, Math.max(2, g.bruto / maior * trilha), B, [0, 4, 4, 0]);
-    ctx.fill();
+    if (l.barra) {
+      const b = l.tipo === 'item' ? B - 6 : B;
+      ctx.fillStyle = GC.grade;
+      ctx.fillRect(x0, y, 1, h); // linha de base
+      ctx.fillStyle = GC.serie;
+      ctx.beginPath();
+      ctx.roundRect(x0 + 1, meio - b / 2, Math.max(2, l.valor / maior * trilha), b, [0, 4, 4, 0]);
+      ctx.fill();
+    } else {
+      ctx.fillStyle = GC.grade;
+      ctx.fillRect(M, meio + 13, W - 2 * M, 1); // separa o título do grupo dos seus itens
+    }
 
     ctx.textAlign = 'right';
-    fonte(600, 15);
+    fonte(l.tipo === 'item' ? 400 : 600, tamanho);
     ctx.fillStyle = GC.texto;
-    ctx.fillText(moeda.format(g.bruto), W - M - colPct, meio);
+    ctx.fillText(moeda.format(l.valor), W - M - colPct, meio);
     fonte(400, 14);
     ctx.fillStyle = GC.suave;
-    ctx.fillText(pct(g.bruto / total), W - M, meio);
-    y += L;
+    ctx.fillText(pct(l.valor / total), W - M, meio);
+    y += h;
   }
 
   // Total

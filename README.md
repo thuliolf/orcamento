@@ -60,7 +60,7 @@ A aba **Indicadores** resume o orçamento aberto:
 - valor ao cliente por grupo, com cada barra dividida em custo, imposto e lucro;
 - % de lucro por grupo, com uma linha marcando o % do evento inteiro;
 - os mesmos números em tabela;
-- **gráfico para o cliente**: só o valor de cada grupo e a fatia do total, com logo e nome da empresa no topo e a logo em marca-d'água no fundo, sem custo, imposto nem lucro. O botão **Baixar imagem** salva em PNG.
+- **gráfico para o cliente**: segue o "Na impressão" de cada grupo, como o relatório — grupo em "valor único" vira uma barra; em "linha por linha", aparece o total do grupo e uma barra por item (itens sem valor ficam de fora). Mostra a fatia do total, com logo e nome da empresa no topo e a logo em marca-d'água no fundo, sem custo, imposto nem lucro. O botão **Baixar imagem** salva em PNG.
 
 Grupos sem valor ficam de fora. Passe o mouse (ou navegue com Tab) sobre uma barra para ver os detalhes do grupo.
 
