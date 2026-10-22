@@ -214,6 +214,20 @@ details.cartao table { margin-top: 10px; }
 .barra-pct.negativa { border-radius: 4px 0 0 4px; }
 .media { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--texto); opacity: .55; }
 
+/* Aviso de alterações não salvas (Novo / Abrir) */
+#aviso-alteracoes {
+  border: 1px solid var(--linha);
+  border-top: 4px solid var(--acento);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: min(420px, calc(100vw - 32px));
+  color: var(--texto);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .18);
+}
+#aviso-alteracoes::backdrop { background: rgba(0, 0, 0, .35); }
+.aviso-msg { margin: 0 0 16px; font-size: 15px; }
+.aviso-botoes { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+
 #dica {
   position: fixed; z-index: 10; pointer-events: none;
   background: var(--papel);
@@ -288,6 +302,8 @@ details.cartao table { margin-top: 10px; }
   .kpi { padding: 12px; }
   .kpi.heroi { grid-column: 1 / -1; }
   .kpi .valor { font-size: 19px; }
+
+  .aviso-botoes button { flex: 1 1 100%; padding: 10px; }
 }
 
 /* Telas bem estreitas (iPhone SE): um cartão de destaque por linha, para o valor não quebrar no meio */

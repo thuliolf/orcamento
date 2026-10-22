@@ -464,20 +464,46 @@ document.getElementById('btn-logo-remover').addEventListener('click', () => {
 
 // ---------- Novo / abrir / salvar ----------
 
-function podeDescartar() {
-  return !alterado || confirm('Há alterações não salvas. Descartar?');
+// Antes de Novo/Abrir, se há alterações não salvas, pergunta numa janela da própria página.
+// A caixa de confirmação do navegador não aparece em alguns navegadores dentro de apps e,
+// no iPhone, impede o seletor de arquivos de abrir em seguida. Aqui cada botão é um toque
+// novo, então "continuar" consegue abrir o seletor.
+function seguirSemPerder(continuar) {
+  if (!alterado) return continuar();
+  const dlg = document.getElementById('aviso-alteracoes');
+  const msg = dlg.querySelector('.aviso-msg');
+  const btSalvar = dlg.querySelector('[data-acao="salvar"]');
+  const btContinuar = dlg.querySelector('[data-acao="continuar"]');
+  msg.textContent = 'Há alterações neste orçamento que ainda não foram salvas.';
+  btSalvar.hidden = false;
+  btContinuar.textContent = 'Descartar alterações';
+  btContinuar.classList.add('perigo');
+  dlg.onclick = async e => {
+    const acao = e.target.closest('button')?.dataset.acao;
+    if (acao === 'cancelar') dlg.close();
+    if (acao === 'continuar') { dlg.close(); continuar(); }
+    if (acao === 'salvar' && await salvar()) { // cancelou o salvamento: continua perguntando
+      msg.textContent = 'Orçamento salvo.';
+      btSalvar.hidden = true;
+      btContinuar.textContent = 'Continuar';
+      btContinuar.classList.remove('perigo');
+    }
+  };
+  dlg.showModal();
 }
 
-document.getElementById('btn-novo').addEventListener('click', () => {
-  if (!podeDescartar()) return;
+document.getElementById('btn-novo').addEventListener('click', () => seguirSemPerder(() => {
+  // Empresa e logo continuam as do orçamento atual; se ele não tiver, vêm do padrão
+  const { empresa, logo } = orc;
   orc = novoOrcamento();
+  if (empresa) orc.empresa = empresa;
+  if (logoValida(logo)) orc.logo = logo;
   alterado = false;
   render();
-});
+}));
 
-document.getElementById('btn-abrir').addEventListener('click', () => {
-  if (podeDescartar()) document.getElementById('arquivo').click();
-});
+document.getElementById('btn-abrir').addEventListener('click', () => seguirSemPerder(
+  () => document.getElementById('arquivo').click()));
 
 document.getElementById('arquivo').addEventListener('change', async e => {
   const arquivo = e.target.files[0];
@@ -530,10 +556,14 @@ async function entregarArquivo(blob, nome) {
   return true;
 }
 
-document.getElementById('btn-salvar').addEventListener('click', async () => {
+async function salvar() {
   const blob = new Blob([JSON.stringify(orc, null, 2)], { type: 'application/json' });
-  if (await entregarArquivo(blob, nomeArquivo())) alterado = false;
-});
+  if (!await entregarArquivo(blob, nomeArquivo())) return false;
+  alterado = false;
+  return true;
+}
+
+document.getElementById('btn-salvar').addEventListener('click', salvar);
 
 window.addEventListener('beforeunload', e => {
   if (alterado) e.preventDefault();

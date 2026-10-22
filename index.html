@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Orçamento de Eventos</title>
-  <link rel="stylesheet" href="style.css?v=13">
+  <link rel="stylesheet" href="style.css?v=14">
 </head>
 <body>
   <div class="app">
@@ -61,11 +61,20 @@
   <div id="impressao"></div>
   <div id="dica" role="tooltip" hidden></div>
 
-  <script src="calc.js?v=13"></script>
-  <script src="identidade.js?v=13"></script>
-  <script src="app.js?v=13"></script>
-  <script src="indicadores.js?v=13"></script>
-  <script src="grafico-cliente.js?v=13"></script>
-  <script src="excel.js?v=13"></script>
+  <dialog id="aviso-alteracoes">
+    <p class="aviso-msg"></p>
+    <div class="aviso-botoes">
+      <button data-acao="salvar" class="principal">Salvar</button>
+      <button data-acao="continuar"></button>
+      <button data-acao="cancelar">Cancelar</button>
+    </div>
+  </dialog>
+
+  <script src="calc.js?v=14"></script>
+  <script src="identidade.js?v=14"></script>
+  <script src="app.js?v=14"></script>
+  <script src="indicadores.js?v=14"></script>
+  <script src="grafico-cliente.js?v=14"></script>
+  <script src="excel.js?v=14"></script>
 </body>
 </html>

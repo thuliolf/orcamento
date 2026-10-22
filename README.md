@@ -27,6 +27,10 @@ Digitar o líquido ou o bruto marca a linha como manual (fundo amarelo): ela dei
 
 Para mudar a ordem de grupos e subgrupos, arraste pela alça ⠿ ou use as setas ↑ ↓ ao lado do nome. Subgrupos mudam de lugar dentro do próprio grupo. A impressão, os indicadores e o Excel seguem a ordem da tela.
 
+Ao clicar em **Novo** ou **Abrir…** com alterações ainda não salvas, a página pergunta antes: **Salvar**, **Descartar alterações** ou **Cancelar**.
+
+**Novo** mantém a empresa e a logo do orçamento que estava aberto. Se ele não tiver, usa as do padrão.
+
 **Usar como padrão** guarda empresa, logo, imposto e markup no navegador para os próximos orçamentos novos.
 
 A logo é reduzida para no máximo 400×200 px e fica dentro do próprio arquivo `.json`.
