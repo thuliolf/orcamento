@@ -129,6 +129,20 @@ td.acoes { text-align: right; }
 .subtotal td, tfoot td { font-weight: 600; }
 tfoot td { border-bottom: 0; background: var(--fundo); }
 
+/* Separação das linhas: subtotais e totais em faixas próprias, mais forte no total do grupo */
+.subtotal td { background: color-mix(in srgb, var(--acento) 6%, var(--papel)); border-top: 1px solid var(--linha); }
+tfoot td { background: color-mix(in srgb, var(--marca) 7%, var(--papel)); border-top: 2px solid var(--marca); }
+
+/* Computador: linhas zebradas, destaque sob o mouse e barra na cor da marca na linha em edição */
+@media (min-width: 761px) {
+  tr[data-i] > td { transition: background-color .12s; }
+  tr[data-i]:nth-child(even of tr[data-i]) > td { background: var(--fundo); }
+  tr[data-i]:hover > td { background: color-mix(in srgb, var(--acento) 5%, var(--papel)); }
+  tr[data-i]:focus-within > td { background: color-mix(in srgb, var(--acento) 9%, var(--papel)); }
+  tr[data-i] > td:first-child { box-shadow: inset 3px 0 0 transparent; }
+  tr[data-i]:focus-within > td:first-child { box-shadow: inset 3px 0 0 var(--acento); }
+}
+
 .total-geral {
   background: var(--papel);
   border: 1px solid var(--linha);
@@ -276,8 +290,25 @@ details.cartao table { margin-top: 10px; }
     grid-template-columns: 1fr 1fr;
     gap: 8px 12px;
     padding: 12px;
-    border-bottom: 1px solid var(--linha);
   }
+  /* Cada linha é um cartão branco, com sombra e espaço, sobre o fundo colorido do grupo */
+  .grupo tbody { background: var(--fundo); padding: 0 8px 10px; }
+  .grupo tr[data-i] {
+    margin-top: 10px;
+    background: var(--papel);
+    border: 1px solid var(--linha);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .06), 0 3px 8px rgba(0, 0, 0, .04);
+  }
+  .grupo tr[data-i]:focus-within {
+    border-color: var(--acento);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--acento) 20%, transparent);
+  }
+  .grupo td.col-descricao input { font-weight: 600; }
+  .grupo tr.subtotal { margin-top: 10px; border-radius: 8px; background: color-mix(in srgb, var(--acento) 8%, var(--papel)); }
+  .grupo tr.subtotal td, .grupo tfoot td { background: none; border: 0; }
+  .grupo tfoot tr { background: color-mix(in srgb, var(--marca) 7%, var(--papel)); border-top: 2px solid var(--marca); }
+  .grupo tbody + tbody .sub-cab td { border-top: 1px solid var(--linha); margin-top: 6px; }
   .grupo tr.subtotal[hidden] { display: none; } /* precisa vir depois da regra de grade acima */
   .grupo td { border: 0; padding: 0; white-space: normal; }
   .grupo td.num { text-align: left; }
