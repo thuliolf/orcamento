@@ -134,7 +134,7 @@ tfoot td { border-bottom: 0; background: var(--fundo); }
 tfoot td { background: color-mix(in srgb, var(--marca) 7%, var(--papel)); border-top: 2px solid var(--marca); }
 
 /* Computador: linhas zebradas, destaque sob o mouse e barra na cor da marca na linha em edição */
-@media (min-width: 761px) {
+@media (min-width: 1024px) {
   tr[data-i] > td { transition: background-color .12s; }
   tr[data-i]:nth-child(even of tr[data-i]) > td { background: var(--fundo); }
   tr[data-i]:hover > td { background: color-mix(in srgb, var(--acento) 5%, var(--papel)); }
@@ -264,20 +264,12 @@ details.cartao table { margin-top: 10px; }
   .linha-graf .val small { display: none; }
 }
 
-/* ---------- Celular: cabeçalho compacto e linhas da tabela como cartões ---------- */
+/* ---------- Celular e tablet (até 1023px): linhas da tabela como cartões ----------
+   Tablets mais usados no Brasil (StatCounter, set/2026): 601, 800–834 de largura em pé;
+   1007–1334 deitados. Até 1023px a tabela de 9 colunas não cabe sem rolar para o lado. */
 
-@media (max-width: 760px) {
-  main { padding: 10px; }
-  input, select, button { font-size: 16px; } /* com menos de 16px o iPhone dá zoom ao tocar no campo */
-
-  .barra { position: static; padding: 10px 12px; gap: 8px; }
-  .barra h1 { font-size: 16px; flex-basis: 100%; }
-  .barra nav { gap: 6px; }
-  .barra nav button { padding: 6px 10px; }
-
-  .cabecalho { grid-template-columns: 1fr 1fr; padding: 12px; }
-  .cabecalho label:has(input:not(.num):not([type="date"])), .campo-logo { grid-column: 1 / -1; }
-
+@media (max-width: 1023px) {
+  /* Cabeçalho do grupo: nome numa linha, controles na de baixo */
   .grupo-cab { padding: 10px; gap: 6px; }
   .grupo-cab .nome-grupo { flex-basis: 100%; order: -1; }
 
@@ -287,7 +279,7 @@ details.cartao table { margin-top: 10px; }
   .grupo tr[hidden] { display: none; }
   .grupo tr[data-i], .grupo tr.subtotal, .grupo tfoot tr {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 8px 12px;
     padding: 12px;
   }
@@ -326,6 +318,59 @@ details.cartao table { margin-top: 10px; }
   .grupo tr.subtotal td:nth-child(2), .grupo tfoot td:nth-child(2) { grid-column: 1 / -1; }
   .grupo .sub-cab td { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding: 8px 10px; }
   .grupo .sub-cab input { flex: 1 1 100%; width: auto; order: -1; }
+
+  /* Ordem dos campos no cartão: editáveis primeiro (Qtd, Real, Líquido, Bruto), depois os calculados */
+  .grupo tr[data-i] > td:nth-child(1) { order: 1; }
+  .grupo tr[data-i] > td:nth-child(3) { order: 2; }
+  .grupo tr[data-i] > td:nth-child(4) { order: 3; }
+  .grupo tr[data-i] > td:nth-child(6) { order: 4; }
+  .grupo tr[data-i] > td:nth-child(5) { order: 5; }
+  .grupo tr[data-i] > td:nth-child(7) { order: 6; }
+  .grupo tr[data-i] > td:nth-child(8) { order: 7; }
+  .grupo tr[data-i] > td:nth-child(9) { order: 8; }
+  .grupo tr.subtotal, .grupo tfoot tr { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+}
+
+/* Tablet: nome do subgrupo e botões na mesma linha */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .grupo .sub-cab input { flex: 1 1 260px; }
+}
+
+/* Tablet deitado de 8,7" (1007px) e telas parecidas: todos os valores numa linha, sob a descrição */
+@media (min-width: 900px) and (max-width: 1023px) {
+  .grupo tr[data-i] { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+}
+
+/* Celular: duas colunas nos cartões */
+@media (max-width: 599px) {
+  .grupo tr[data-i], .grupo tr.subtotal, .grupo tfoot tr { grid-template-columns: 1fr 1fr; }
+}
+
+/* ---------- Telas de toque (celular e tablet) ---------- */
+
+@media (pointer: coarse) {
+  input, select, button { font-size: 16px; } /* com menos de 16px o iPhone/iPad dá zoom ao tocar no campo */
+  input, select { min-height: 44px; }
+  button { min-height: 44px; min-width: 44px; } /* alvo de toque mínimo recomendado (Apple: 44pt) */
+  .alca { padding: 10px 6px; }
+}
+
+/* ---------- Celular: cabeçalho compacto ---------- */
+
+/* ---------- Celular: cabeçalho compacto e linhas da tabela como cartões ---------- */
+
+@media (max-width: 760px) {
+  main { padding: 10px; }
+  input, select, button { font-size: 16px; } /* com menos de 16px o iPhone dá zoom ao tocar no campo */
+
+  .barra { position: static; padding: 10px 12px; gap: 8px; }
+  .barra h1 { font-size: 16px; flex-basis: 100%; }
+  .barra nav { gap: 6px; }
+  .barra nav button { padding: 6px 10px; }
+
+  .cabecalho { grid-template-columns: 1fr 1fr; padding: 12px; }
+  .cabecalho label:has(input:not(.num):not([type="date"])), .campo-logo { grid-column: 1 / -1; }
+
 
   .total-geral dl { grid-template-columns: 1fr max-content; }
 

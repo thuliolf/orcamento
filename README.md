@@ -8,6 +8,8 @@ Não há servidor nem banco de dados. Cada orçamento é um arquivo `.json` que 
 
 Abra o `index.html` no navegador, com duplo clique mesmo. Para testar com dados, abra `exemplos/exemplo.json`.
 
+A tela se adapta ao tamanho: no computador e em tablets deitados a partir de 1024 px (iPad 9 e 10, Galaxy Tab de 10–11"), as linhas ficam em tabela; em tablets em pé (Galaxy Tab de 8,7" e 10–11", iPads) e no Galaxy Tab de 8,7" deitado, cada linha vira um cartão com os campos editáveis lado a lado. Em telas de toque, campos têm 16 px (sem zoom do iPhone/iPad) e botões, no mínimo 44 px.
+
 No celular, cada linha do orçamento aparece como um cartão, e **Salvar**, **Excel** e **Baixar imagem** abrem o menu de compartilhar do aparelho ("Salvar em Arquivos", WhatsApp, e-mail…) em vez de baixar, porque navegadores dentro de apps (como o do WhatsApp no iPhone) não baixam arquivos gerados pela página. No computador, os arquivos são baixados normalmente.
 
 ## Regras de cálculo
